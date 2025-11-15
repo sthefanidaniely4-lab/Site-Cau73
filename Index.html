@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Servidor Cau73| 1.21.120 bedrock |Somente minecraft Original">
+  <title>Cau73 servidor de minecraft bedrock</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f8fafc;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #38bdf8;
+      text-shadow: 0 0 10px #38bdf8;
+    }
+
+    h2 {
+      color: #a5f3fc;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .box {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      border-radius: 12px;
+      padding: 15px 25px;
+      margin-top: 15px;
+      width: 100%;
+      max-width: 400px;
+      text-align: left;
+    }
+
+    .box input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .box button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .box button:hover {
+      background: #0ea5e9;
+    }
+
+    .ip-box {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      border-radius: 12px;
+      padding: 10px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .discord-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #5865f2;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .discord-btn:hover {
+      background: #4752c4;
+    }
+
+    footer {
+      margin-top: 30px;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .logout-btn:hover {
+      background: #dc2626;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="login-area">
+    <h1>🌍 Cau73</h1>
+    <h2>Login ou Cadastre-se</h2>
+
+    <div class="box">
+      <input type="text" id="user" placeholder="Usuário">
+      <input type="password" id="pass" placeholder="Senha">
+      <button onclick="login()">Entrar</button>
+      <button onclick="register()">Cadastrar</button>
+    </div>
+  </div>
+
+  <div id="main-area" style="display:none;">
+    <h1>🌍 Cau73</h1>
+    <h2>Server de miecraft bedrock 1.21.120</h2>
+
+    <div class="ip-box" id="copyIP">
+      <strong>𝗜𝗣:𝗰𝗮𝘂𝟳𝟯𝟯.𝗮𝘁𝗲𝗿𝗻𝗼𝘀.𝗺𝗲</strong>
+      <strong>𝗣𝗼𝗿𝘁𝗮: 𝟭𝟭𝟴𝟰𝟴</strong>
+      <button class="copy-btn" onclick="copyIP()">Copiar</button>
+    </div>
+
+    <div class="info">
+      🔥 Servidor <strong>minecraft BR bedrock</strong>Porta: 11848<br>
+      💎 Compatível com <strong>Somente minecraft Original</strong>.<br>
+      ⚙️ Versão <strong>1.21.120 bedrock</strong>.
+    </div>
+
+    <p id="ownerTag" style="margin-top:10px; font-weight:bold; color:#38bdf8;"></p>
+
+    <a class="discord-btn" href="https://discord.gg/VxEDT9BF" target="_blank">Entrar no Discord</a>
+
+    <button class="logout-btn" onclick="logout()">Sair</button>
+
+    <footer>
+      © 2025 Cau73 - Criado por Cauã
+    </footer>
+  </div>
+
+  <script>
+    const users = JSON.parse(localStorage.getItem("users")) || {};
+
+    function saveUsers() {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    function login() {
+      const user = document.getElementById("user").value.trim();
+      const pass = document.getElementById("pass").value.trim();
+
+      if (!user || !pass) return alert("Preencha todos os campos!");
+
+      if (!users[user]) return alert("Usuário não encontrado! Cadastre-se primeiro.");
+      if (users[user].password !== pass) return alert("Senha incorreta!");
+
+      localStorage.setItem("loggedUser", user);
+      showMain();
+    }
+
+    function register() {
+      const user = document.getElementById("user").value.trim();
+      const pass = document.getElementById("pass").value.trim();
+
+      if (!user || !pass) return alert("Preencha todos os campos!");
+
+      if (users[user]) return alert("Usuário já existe!");
+
+      // Código especial para dono
+      const code = prompt("Digite o código de verificação (ou deixe em branco):");
+      const role = (code === "8776") ? "owner" : "player";
+
+      users[user] = { password: pass, role };
+      saveUsers();
+
+      alert("✅ Cadastro realizado com sucesso!");
+    }
+
+    function showMain() {
+      const user = localStorage.getItem("loggedUser");
+      if (!user) return;
+
+      document.getElementById("login-area").style.display = "none";
+      document.getElementById("main-area").style.display = "block";
+
+      const role = users[user]?.role || "player";
+      const tag = document.getElementById("ownerTag");
+      tag.textContent = role === "owner" ? `👑 Você é o DONO (${user})` : `👤 Logado como: ${user}`;
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      document.getElementById("main-area").style.display = "none";
+      document.getElementById("login-area").style.display = "block";
+    }
+
+    function copyIP() {
+      navigator.clipboard.writeText("Cau733.atrnos.me");
+      alert("✅ IP copiado para a área de transferência!");
+    }
+
+    // Mantém login ativo se já logou antes
+    window.onload = showMain;
+  </script>
+
+</body>
+</html>
